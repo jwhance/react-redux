@@ -38,8 +38,22 @@ const ManageCoursePage = ({courses, authors, loadAuthors, loadCourses, saveCours
         }));
     };
 
+    function formIsValid() {
+        const {title, authorId, category} = course;
+        const _errors = {};
+
+        if (!title) _errors.title = 'Title is required.';
+        if (!authorId) _errors.author = 'Author is required.';
+        if (!category) _errors.category = 'Category is required.';
+
+        setErrors(_errors);
+
+        return Object.keys(_errors).length === 0;
+    }
+
     const handleSave = (event) => {
         event.preventDefault();
+        if (!formIsValid()) return;
         setSaving(true);
         saveCourse(course).then( () => {
             toast.success('Course saved')

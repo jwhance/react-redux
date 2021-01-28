@@ -12,6 +12,9 @@ const courseReducer = (state = initialState.courses, action) => {
         case types.LOAD_COURSES_SUCCESS:
             return action.courses;
 
+        case types.DELETE_COURSE_OPTIMISTIC:
+            return state.filter(course => course.id !== action.course.id);  // Returns all courses EXCEPT the one we want to delete.
+
         default:
             return state;
     }
