@@ -9,7 +9,7 @@ import {saveCourse} from "../../api/courseApi";
 import Spinner from '../common/Spinner';
 import {toast} from 'react-toastify';
 
-const ManageCoursePage = ({courses, authors, loadAuthors, loadCourses, saveCourse, history, ...props}) => {
+export function ManageCoursePage ({courses, authors, loadAuthors, loadCourses, saveCourse, history, ...props}) {
     const [course, setCourse] = useState({...props.course});
     const [errors, setErrors] = useState({});
     const [saving, setSaving] = useState(false);
