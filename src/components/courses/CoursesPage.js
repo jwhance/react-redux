@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import * as courseActions from '../../redux/actions/courseActions';
 import * as authorActions from '../../redux/actions/authorActions';
 import PropTypes from 'prop-types';
-import {bindActionCreators} from 'redux';
+import { bindActionCreators } from 'redux';
 import CourseList from './CourseList';
 import { Redirect } from "react-router-dom";
 import Spinner from '../common/Spinner';
@@ -21,10 +21,10 @@ class CoursesPage extends React.Component {
             });
         }
 
-        if (this.props.authors.length === 0){
+        if (this.props.authors.length === 0) {
             this.props.actions.loadAuthors().catch(error => {
                 alert('Loading authors failed ' + error);
-            });        
+            });
         }
     }
 
@@ -37,14 +37,15 @@ class CoursesPage extends React.Component {
     };
     */
 
-   handleDeleteCourse = async course => {
-    toast.success("Course deleted");
-    try {
-        await this.props.actions.deleteCourse(course);
-    } catch(error)  {
-        toast.error("Delete failed: " + error.message, {autoClose: false});
-    }
-};
+    handleDeleteCourse = async course => {
+        toast.success("Course deleted");
+        try {
+            debugger; // #1
+            await this.props.actions.deleteCourse(course);
+        } catch (error) {
+            toast.error("Delete failed: " + error.message, { autoClose: false });
+        }
+    };
 
 
     render() {
@@ -54,7 +55,7 @@ class CoursesPage extends React.Component {
                 <h2>Courses</h2>
                 {this.props.loading ? (<Spinner />) : (
                     <>
-                        <button style={{marginBottom: 20}} className='btn btn-primary add-course' onClick={() => this.setState({redirectToAddCoursePage: true})} >
+                        <button style={{ marginBottom: 20 }} className='btn btn-primary add-course' onClick={() => this.setState({ redirectToAddCoursePage: true })} >
                             Add Course
                             </button>
                         <CourseList courses={this.props.courses} onDeleteClick={this.handleDeleteCourse} />
@@ -72,21 +73,21 @@ CoursesPage.propTypes = {
     loading: PropTypes.bool.isRequired
 };
 
-function mapStateToProps(state){
+function mapStateToProps(state) {
     return {
-        courses: 
+        courses:
             state.authors.length === 0 ? [] : state.courses.map(course => {
-            return {
-                ...course,
-                authorName: state.authors.find(a => a.id === course.authorId).name
-            };
-        }),
+                return {
+                    ...course,
+                    authorName: state.authors.find(a => a.id === course.authorId).name
+                };
+            }),
         authors: state.authors,
         loading: state.apiCallsInProgress > 0
     };
 }
 
-function mapDispatchToProps(dispatch){
+function mapDispatchToProps(dispatch) {
     return {
         actions: {
             loadCourses: bindActionCreators(courseActions.loadCourses, dispatch),

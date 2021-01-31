@@ -2,9 +2,9 @@ import * as types from '../actions/actionTypes';
 import initialState from './initialState';
 
 const courseReducer = (state = initialState.courses, action) => {
-    switch(action.type) {
+    switch (action.type) {
         case types.CREATE_COURSE_SUCCESS:
-            return [...state, {...action.course}];
+            return [...state, { ...action.course }];
 
         case types.UPDATE_COURSE_SUCCESS:
             return state.map(course => course.id === action.course.id ? action.course : course);
@@ -13,6 +13,7 @@ const courseReducer = (state = initialState.courses, action) => {
             return action.courses;
 
         case types.DELETE_COURSE_OPTIMISTIC:
+            debugger;  // #5
             return state.filter(course => course.id !== action.course.id);  // Returns all courses EXCEPT the one we want to delete.
 
         default:
