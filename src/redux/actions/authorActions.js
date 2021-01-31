@@ -1,21 +1,24 @@
 import * as types from './actionTypes';
 import * as authorApi from '../../api/authorApi';
-import { beginApiCall, apiCallError} from './apiStatusActions';
+import { beginApiCall, apiCallError } from './apiStatusActions';
 
 export function loadAuthorsSuccess(authors) {
-    return {type: types.LOAD_AUTHORS_SUCCESS, authors: authors};
+    return {
+        type: types.LOAD_AUTHORS_SUCCESS,
+        authors: authors
+    };
 }
 
-export function loadAuthorssSuccess(authors){
+export function deleteAuthorSuccess(author) {
     return {
-        type: types.LOAD_AUTHORS_SUCCESS, 
-        authors: authors
+        type: types.DELETE_AUTHOR_SUCCESS,
+        author: author
     };
 }
 
 // THUNK!
 export function loadAuthors() {
-    return function(dispatch){
+    return function (dispatch) {
         dispatch(beginApiCall());
         return authorApi.getAuthors().then(authors => {
             dispatch(loadAuthorsSuccess(authors));
@@ -23,5 +26,16 @@ export function loadAuthors() {
             dispatch(apiCallError(error));
             throw error;
         })
+    }
+}
+
+export function deleteAuthor(author) {
+    //debugger;
+    return function (dispatch) {
+        console.log('deleteAuthor called: ' + author);
+        dispatch(beginApiCall());
+        return authorApi.deleteAuthor(author.id).then(() => {
+            dispatch(deleteAuthorSuccess(author));
+        });
     }
 }

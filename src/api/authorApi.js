@@ -6,3 +6,11 @@ export function getAuthors() {
     .then(handleResponse)
     .catch(handleError);
 }
+
+export function deleteAuthor(authorId) {
+  //debugger;  // #6
+  return fetch(baseUrl + authorId, { method: "DELETE" })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
