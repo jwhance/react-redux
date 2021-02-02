@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from 'react-redux';
 import * as authorActions from '../../redux/actions/authorActions';
+import * as courseActions from '../../redux/actions/courseActions';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import AuthorList from './AuthorList';
@@ -14,6 +15,13 @@ class AuthorsPage extends React.Component {
     };
 
     componentDidMount() {
+        //debugger;
+        if (this.props.courses.length === 0) {
+            this.props.actions.loadCourses().catch(error => {
+                alert('Loading courses failed ' + error);
+            });
+        }
+
         if (this.props.authors.length === 0) {
             this.props.actions.loadAuthors().catch(error => {
                 alert('Loading authors failed ' + error);
@@ -30,14 +38,19 @@ class AuthorsPage extends React.Component {
     };
     */
 
-    handleDeleteAuthor = async author => {
-        toast.success("Author deleted");
+    handleDeleteAuthor = async (author, courses) => {
+        
         try {
-            debugger; // #1
-            await this.props.actions.deleteAuthor(author);
+            //debugger; // #1
+            if (courses.filter(course => course.authorId === author.id).length > 0){
+                toast.error("Cannot delete an author with courses.  Delete the courses first.")
+            } else {
+                await this.props.actions.deleteAuthor(author);
+                toast.success("Author deleted");
+            }
         } catch (error) {
             console.log(error);
-            debugger;
+            //debugger;
             toast.error("Delete failed: " + error.message, { autoClose: false });
         }
     };
@@ -53,7 +66,7 @@ class AuthorsPage extends React.Component {
                         <button style={{ marginBottom: 20 }} className='btn btn-primary add-author' onClick={() => this.setState({ redirectToAddAuthorsPage: true })} >
                             Add Author
                             </button>
-                        <AuthorList authors={this.props.authors} onDeleteClick={this.handleDeleteAuthor} />
+                        <AuthorList courses={this.props.courses} authors={this.props.authors} onDeleteClick={this.handleDeleteAuthor} />
                     </>
                 )}
             </>
@@ -64,11 +77,19 @@ class AuthorsPage extends React.Component {
 AuthorsPage.propTypes = {
     actions: PropTypes.object.isRequired,
     authors: PropTypes.array.isRequired,
+    courses: PropTypes.array.isRequired,
     loading: PropTypes.bool.isRequired
 };
 
 function mapStateToProps(state) {
     return {
+        courses:
+            state.authors.length === 0 ? [] : state.courses.map(course => {
+                return {
+                    ...course,
+                    authorName: state.authors.find(a => a.id === course.authorId).name
+                };
+            }),        
         authors: state.authors,
         loading: state.apiCallsInProgress > 0
     };
@@ -77,6 +98,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         actions: {
+            loadCourses: bindActionCreators(courseActions.loadCourses, dispatch),
             loadAuthors: bindActionCreators(authorActions.loadAuthors, dispatch),
             deleteAuthor: bindActionCreators(authorActions.deleteAuthor, dispatch)
         }

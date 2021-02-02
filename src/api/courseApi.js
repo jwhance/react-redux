@@ -18,7 +18,7 @@ export function saveCourse(course) {
 }
 
 export function deleteCourse(courseId) {
-  debugger;  // #6
+  //debugger;  // #6
   return fetch(baseUrl + courseId, { method: "DELETE" })
     .then(handleResponse)
     .catch(handleError);

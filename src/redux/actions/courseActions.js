@@ -18,7 +18,7 @@ export function updateCourseSuccess(course) {
 }
 
 export function deleteCourseOptimistic(course) {
-    debugger; // #4
+    //debugger; // #4
     return { type: types.DELETE_COURSE_OPTIMISTIC, course };
 }
 
@@ -50,9 +50,9 @@ export function saveCourse(course) {
 }
 
 export function deleteCourse(course) {
-    debugger; // #2
+    //debugger; // #2
     return function (dispatch) {
-        debugger; // #3
+        //debugger; // #3
         // Doing an optimistic delete, so not dispatching begin/end api call
         // actions, or apiCallError actions since we're not showing theloading status for this.
         dispatch(deleteCourseOptimistic(course));

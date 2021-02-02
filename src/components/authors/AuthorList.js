@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 
 
 //                    v-Destructuring props argument
-const AuthorList = ({ authors, onDeleteClick }) => (
+const AuthorList = ({ courses, authors, onDeleteClick }) => (
     <table className="table">
         <thead>
             <tr>
@@ -18,7 +18,7 @@ const AuthorList = ({ authors, onDeleteClick }) => (
                     <tr key={author.id}>
                         <td>{author.name}</td>
                         <td>
-                            <button className='btn btn-outline-danger' onClick={() => onDeleteClick(author)}>
+                            <button className='btn btn-outline-danger' onClick={() => onDeleteClick(author, courses)}>
                                 Delete
                 </button>
                         </td>
@@ -30,6 +30,7 @@ const AuthorList = ({ authors, onDeleteClick }) => (
 );
 
 AuthorList.propTypes = {
+    courses: PropTypes.array.isRequired,
     authors: PropTypes.array.isRequired,
     onDeleteClick: PropTypes.func.isRequired
 };
